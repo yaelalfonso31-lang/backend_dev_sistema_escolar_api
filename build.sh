@@ -1,4 +1,3 @@
 pip install -r requirements.txt
-
-# Aplicar migraciones a la nueva base de datos de producción
+python manage.py collectstatic --no-input
 python manage.py migrate
