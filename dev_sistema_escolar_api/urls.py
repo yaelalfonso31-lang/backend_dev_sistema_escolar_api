@@ -10,7 +10,8 @@ from dev_sistema_escolar_api.views import auth
 from dev_sistema_escolar_api.views import eventos
 
 urlpatterns = [
-  
+    path('admin/', admin.site.urls), 
+    
     #Registrar un Admin
     path('api/registro/admin/', users.AdminView.as_view()),
     #Lista de Admins
