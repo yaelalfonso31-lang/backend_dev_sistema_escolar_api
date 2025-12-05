@@ -10,12 +10,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', '-_&+lsebec(whhw!%n@ww&1j=4-^j_if9x8$q
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
 # ALLOWED HOSTS
-ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1',
-    'danielt.pythonanywhere.com',  # ✅ Tu dominio de PythonAnywhere
-    '.vercel.app',  # ✅ Para Vercel
-]
+ALLOWED_HOSTS = ['*'] # O luego: ['sistema-escolar-api.onrender.com']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -45,11 +40,7 @@ MIDDLEWARE = [
 # ============================================
 # CONFIGURACIÓN DE CORS
 # ============================================
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:4200',
-    'http://127.0.0.1:4200',
-    'https://sistemaany-dvt1.vercel.app',  # ✅ Tu URL de Vercel
-]
+CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = [
