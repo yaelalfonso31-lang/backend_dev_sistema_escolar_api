@@ -45,7 +45,7 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:8000',
     'http://127.0.0.1:4200',
 ]
-CORS_ALLOWED_ORIGINS_STR = os.environ.get('CONS_ALLOWED_ORIGINS', 'http://localhost:4200')
+CORS_ALLOWED_ORIGINS_STR = os.environ.get('CORS_ALLOWED_ORIGINS', 'http://localhost:4200')
 CORS_ALLOWED_ORIGINS = CORS_ALLOWED_ORIGINS_STR.split(',')
 
 CORS_ALLOW_CREDENTIALS = True
