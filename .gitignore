@@ -49,7 +49,11 @@ Thumbs.db
 *.wmv
 
 # Django Migrations
-dev_sistema_escolar_api/migrations
+__pycache__/
+*.pyc
+env/
+venv/
+
 
 # SQL Config
 #*.cnf
