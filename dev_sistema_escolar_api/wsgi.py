@@ -7,7 +7,7 @@ import sys
 from django.core.wsgi import get_wsgi_application
 
 # ✅ Agregar el path de tu proyecto
-path = '/home/alfonso7373/backend_dev_sistema_escolar_api/'  # Cambia esto a tu ruta real
+path = '/home/Alfonso3131/backend_dev_sistema_escolar_api/'  # Cambia esto a tu ruta real
 if path not in sys.path:
     sys.path.append(path)
 
