@@ -1,17 +1,27 @@
 import os
+from pathlib import Path
+import dj_database_url # <--- Importante para la base de datos de Render
 
-# Build paths inside the project
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', '-_&+lsebec(whhw!%n@ww&1j=4-^j_if9x8$q778+99oz&!ms2')
+# ============================================
+# SEGURIDAD
+# ============================================
+# En producción (Render), toma la clave de las variables de entorno.
+# En local, usa la clave insegura por defecto para desarrollo.
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-default-key-para-desarrollo-local')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+# DEBUG debe ser True solo si la variable no está definida o es 'True'
+# En Render, asegúrate de poner la variable de entorno DEBUG = False
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-# ALLOWED HOSTS
-ALLOWED_HOSTS = ['*'] # O luego: ['sistema-escolar-api.onrender.com']
+# ALLOWED_HOSTS: Acepta localhost y tu dominio de Render (o cualquier host en producción con '*')
+ALLOWED_HOSTS = ['*'] 
 
+# ============================================
+# APLICACIONES
+# ============================================
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -19,17 +29,20 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_filters',
+    # Third party apps
+    'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
-    'corsheaders',
+    'django_filters',
+    # Local apps
     'dev_sistema_escolar_api',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware', # <--- AÑADIDO: Para servir archivos estáticos en Render
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',  # ✅ CORS debe ir ANTES de CommonMiddleware
+    'corsheaders.middleware.CorsMiddleware', # CORS antes de Common
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -38,10 +51,9 @@ MIDDLEWARE = [
 ]
 
 # ============================================
-# CONFIGURACIÓN DE CORS
+# CORS (Permisos de acceso desde Frontend)
 # ============================================
-CORS_ALLOW_ALL_ORIGINS = True
-
+CORS_ALLOW_ALL_ORIGINS = True # Útil para desarrollo. En producción, considera restringirlo a tu dominio de frontend.
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = [
     'accept',
@@ -76,24 +88,20 @@ TEMPLATES = [
 WSGI_APPLICATION = 'dev_sistema_escolar_api.wsgi.application'
 
 # ============================================
-# DATABASE CONFIGURATION
+# BASE DE DATOS (La magia para que funcione en ambos lados)
 # ============================================
+# Por defecto usa SQLite (local). 
+# Si Render inyecta la variable DATABASE_URL, dj_database_url la usará automáticamente (PostgreSQL).
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('DB_NAME', 'Alfonso3131$dev_sistema_escolar_db'),
-        'USER': os.environ.get('DB_USER', 'Alfonso3131'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', '891011ygu@'),
-        'HOST': os.environ.get('DB_HOST', 'Alfonso3131.mysql.pythonanywhere-services.com'),
-        'PORT': os.environ.get('DB_PORT', '3306'),
-        'OPTIONS': {
-            'charset': 'utf8mb4',
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-        }
-    }
+    'default': dj_database_url.config(
+        default='sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3'),
+        conn_max_age=600
+    )
 }
 
-# Password validation
+# ============================================
+# VALIDACIÓN DE PASSWORD
+# ============================================
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -101,24 +109,28 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# Internationalization
+# ============================================
+# INTERNACIONALIZACIÓN
+# ============================================
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
 # ============================================
-# STATIC FILES CONFIGURATION
+# ARCHIVOS ESTÁTICOS (CSS, JS, Imágenes)
 # ============================================
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') # Carpeta donde Render reunirá los archivos
 
-# Media files
+# Configuración de WhiteNoise para almacenamiento comprimido
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # ============================================
-# REST FRAMEWORK CONFIGURATION
+# REST FRAMEWORK
 # ============================================
 REST_FRAMEWORK = {
     'COERCE_DECIMAL_TO_STRING': False,
@@ -137,5 +149,4 @@ REST_FRAMEWORK = {
     ),
 }
 
-# Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
