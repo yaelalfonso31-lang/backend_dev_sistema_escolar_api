@@ -90,10 +90,10 @@ WSGI_APPLICATION = 'dev_sistema_escolar_api.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('DB_NAME', 'SerranoPastrana31$sistema_escola_db'),
-        'USER': os.environ.get('DB_USER', 'SerranoPastrana31'),
+        'NAME': os.environ.get('DB_NAME', 'Alfonso7373$sistema_escolar_db'),
+        'USER': os.environ.get('DB_USER', 'Alfonso7373'),
         'PASSWORD': os.environ.get('DB_PASSWORD', '891011ygu@'),
-        'HOST': os.environ.get('DB_HOST', 'SerranoPastrana31.mysql.pythonanywhere-services.com'),
+        'HOST': os.environ.get('DB_HOST', 'Alfonso7373.mysql.pythonanywhere-services.com'),
         'PORT': os.environ.get('DB_PORT', '3306'),
         'OPTIONS': {
             'charset': 'utf8mb4',
