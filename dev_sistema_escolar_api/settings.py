@@ -40,13 +40,12 @@ MIDDLEWARE = [
 ]
 
 # Configuración de CORS: define orígenes permitidos y quita CORS_ORIGIN_ALLOW_ALL
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:4200',
-    'http://localhost:8000',
-    'http://127.0.0.1:4200',
-]
+
 CORS_ALLOWED_ORIGINS_STR = os.environ.get('CORS_ALLOWED_ORIGINS', 'http://localhost:4200')
-CORS_ALLOWED_ORIGINS = CORS_ALLOWED_ORIGINS_STR.split(',')
+CORS_ALLOWED_ORIGINS = os.environ.get(
+    'CORS_ALLOWED_ORIGINS',
+    'http://localhost:4200'
+).split(',')
 
 CORS_ALLOW_CREDENTIALS = True
 
